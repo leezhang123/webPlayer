@@ -102,7 +102,7 @@ declare class Transmuxer {
      * 收到解析到媒体增强信息后向上提交
      * @param data 媒体增强信息的Uin8Array
      */
-    _onGetSeiInfo(data: Uint8Array): void;
+    _onGetSeiInfo(data: Uint8Array, tagTimestamp: number): void;
     _onLoggingConfigChanged(config: HJPlayerConfig): void;
     /**
      * 收到M3U8文档解析数据后向上提交

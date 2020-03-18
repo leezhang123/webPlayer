@@ -1602,7 +1602,7 @@ class TSDemuxer {
                     // logger.log('pushing NALU, type/size:' + unit.type + '/' + unit.data.byteLength);
                     if(unit.type === 6) {
                         // 获取到SEI信息
-                        this._emitter.emit(Events.GET_SEI_INFO, new Uint8Array(unit.data));
+                        this._emitter.emit(Events.GET_SEI_INFO, new Uint8Array(unit.data), 0);
                     }
                     units.push(unit);
                 } else {

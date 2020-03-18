@@ -1236,7 +1236,7 @@ class FLVDemuxer {
                 // 获取到SEI信息
                 try {
                     const unitArray: Uint8Array = data.subarray(lengthSize);
-                    this.eventEmitter.emit(Events.GET_SEI_INFO, unitArray);
+                    this.eventEmitter.emit(Events.GET_SEI_INFO, unitArray, tagTimestamp);
                 } catch (e) {
                     Log.log(this.Tag, 'parse sei info error!');
                 }

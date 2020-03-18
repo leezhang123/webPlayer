@@ -194,10 +194,13 @@ const TransmuxingWorker = function (self: Worker) {
         });
     }
 
-    function onGetSeiInfo(data: Uint8Array) {
+    function onGetSeiInfo(data: Uint8Array, tagTimestamp: number) {
         self.postMessage({
             msg: Events.GET_SEI_INFO,
-            data
+            data: {
+                data,
+                tagTimestamp
+            }
         });
     }
 

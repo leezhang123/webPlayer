@@ -301,9 +301,9 @@ class Transmuxer {
      * 收到解析到媒体增强信息后向上提交
      * @param data 媒体增强信息的Uin8Array
      */
-    _onGetSeiInfo(data: Uint8Array) {
+    _onGetSeiInfo(data: Uint8Array, tagTimestamp: number) {
         Promise.resolve().then(() => {
-            this._emitter.emit(Events.GET_SEI_INFO, data);
+            this._emitter.emit(Events.GET_SEI_INFO, data, tagTimestamp);
         });
     }
 
@@ -364,7 +364,7 @@ class Transmuxer {
             this._emitter.emit(message.msg, data);
             break;
         case Events.GET_SEI_INFO:
-            this._emitter.emit(message.msg, data);
+            this._emitter.emit(message.msg, data.data, data.tagTimestamp);
             break;
         case Events.MANIFEST_PARSED:
             this._emitter.emit(message.msg, data);

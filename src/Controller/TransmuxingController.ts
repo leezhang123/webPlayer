@@ -630,8 +630,8 @@ class TransmuxingController {
         });
 
         // FLV-demuxer 向上发送SEI信息
-        this._mediaCodec.on(Events.GET_SEI_INFO, (data: Uint8Array) => {
-            this._emitter.emit(Events.GET_SEI_INFO, data);
+        this._mediaCodec.on(Events.GET_SEI_INFO, (data: Uint8Array, tagTimestamp: number) => {
+            this._emitter.emit(Events.GET_SEI_INFO, data, tagTimestamp);
         });
 
         this._mediaCodec.on(Events.INIT_SEGMENT, (type: string, InitSegment: InitSegment) => {

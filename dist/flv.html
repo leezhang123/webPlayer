@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Demo: play flv video</title>
+</head>
+<body>
+    <video id="videoElement" style="width: 96%; margin: 0 auto;height: 400px;" muted controls></video>
+    <script type="text/javascript" src="./hjplayer.js"></script>
+    <script type="text/javascript">
+        function decodeSEI(data) {
+            var content_length_size = 1;
+            for (var i = 2; i < data.length; i++) {
+                if (data[i] == 255) {
+                    content_length_size++;
+                } else {
+                	break;
+                }
+            }
+            var start = content_length_size + 18; // var start = 2 + content_length_size + 16 - 1;
+            return new TextDecoder("utf-8").decode(data.slice(start, -1));
+        }
+
+        var videoElement = document.getElementById('videoElement');
+        if (HJPlayer.isSupported()) {
+            var sei_list = [];
+            player = new HJPlayer({
+                type: 'flv',
+                url: 'http://asc-play.alo7.com/live_dev/lufei.flv?auth_key=1584447272-0-0-afb7c6385e92a0428b2f31748f227f1c',
+                // url: 'record.flv',
+                cors: true
+            }, {
+                
+            });
+            player.attachMediaElement(videoElement);
+            player.on(HJPlayer.Events.GET_SEI_INFO, (raw_sei, ts) => {
+                var sei = decodeSEI(raw_sei);
+                // console.log(ts, sei);
+
+                if (!sei_list.find(function(existing_sei) {
+                    return existing_sei.data == sei && Math.abs(ts - existing_sei.ts) < 20000;
+                })) {
+                    sei_list.push({
+                        data: sei,
+                        ts: ts
+                    });
+                    // console.log(sei_list);
+                }
+            });
+
+            var lastTime = 0;
+            videoElement.addEventListener("timeupdate", function() {
+                var currentTime = videoElement.currentTime;
+                console.log(currentTime);
+                var sei = sei_list.find(function(existing_sei) {
+                    return (currentTime - lastTime < 1) && (lastTime * 1000) < existing_sei.ts && existing_sei.ts <= currentTime * 1000;
+                });
+                if (sei) {
+                    // Add actions here.
+                    console.log(sei.data);
+                }
+                
+                lastTime = currentTime
+            }, false);
+
+            player.load();
+            player.play();
+       }
+    </script>
+</body>
+</html>

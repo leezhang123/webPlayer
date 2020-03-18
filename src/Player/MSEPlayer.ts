@@ -389,8 +389,8 @@ class MSEPlayer {
             }
         });
 
-        this._transmuxer!.on(Events.GET_SEI_INFO, (data: Uint8Array) => {
-            this._emitter!.emit(Events.GET_SEI_INFO, data);
+        this._transmuxer!.on(Events.GET_SEI_INFO, (data: Uint8Array, tagTimestamp: number) => {
+            this._emitter!.emit(Events.GET_SEI_INFO, data, tagTimestamp);
         });
 
         this._transmuxer!.on(Events.MANIFEST_PARSED, (data: TSManifest) => { // 只对HLS生效
